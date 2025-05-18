@@ -34,6 +34,13 @@ public class SecurityConfig {
                         // публичные
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                         // logout — только для аутентифицированных
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs",
+                                "/webjars/**"
+                        ).permitAll()
                         .requestMatchers("/api/auth/logout").authenticated()
                         // платёжные эндпоинты — тоже только после JWT
                         .requestMatchers("/api/payment/**").authenticated()

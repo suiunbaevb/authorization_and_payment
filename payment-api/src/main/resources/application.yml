@@ -17,6 +17,10 @@ security:
   loginAttempts:
     max: 5
     lockMinutes: 15
-
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
 payment:
   charge: 1.10
