@@ -82,7 +82,7 @@
 ```yaml
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/paydb
+    url: jdbc:postgresql://localhost:5435/paydb
     username: postgres
     password: postgres
   jpa:
@@ -94,12 +94,19 @@ spring:
 jwt:
   secret: super-secret-key-change-me
   ttl: PT30M
+
 security:
   loginAttempts:
     max: 5
     lockMinutes: 15
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
 payment:
   charge: 1.10
+
 ```
 
 ---
