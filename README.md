@@ -187,16 +187,20 @@ curl -X POST http://localhost:8080/api/payment \
 
 ### Swagger UI — авторизация токеном
 
-![Swagger Authorize](docs/swagger-authorize.png)
+![image](https://github.com/user-attachments/assets/df663ab2-c2ad-454e-a4e4-a8f5892ee618)
+![image](https://github.com/user-attachments/assets/c23fdc3a-b6b0-482a-a71a-3fd7c8b187fe)
+
+![image](https://github.com/user-attachments/assets/37d61b47-db33-498d-9f29-88f30e3ab859)
+
+
 
 ### Swagger UI — создание платежа
 
-![Swagger Payment](docs/swagger-payment.png)
+![image](https://github.com/user-attachments/assets/f89edc60-9320-4d35-b73a-bd6184bf16bb)
 
-### Пример ответа при ошибке
 
-![Error Response](docs/error-response.png)
+### После Logout токен становится недействительным и выводит 403 - Forbidden
 
----
+![image](https://github.com/user-attachments/assets/2f23ff13-375a-433e-adcf-4dfbef9bdbe6)
 
-*README подготовлен для отправки работодателю. Не забудьте приложить к репозиторию папку `docs/` с указанными скриншотами.*
+
