@@ -31,10 +31,14 @@ public class SecurityConfig {
 
                 // правила доступа
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()       // логин открыт
-                        .requestMatchers("/logout").authenticated()
-                        .requestMatchers("/payment").authenticated()
-                        .anyRequest().permitAll()
+                        // публичные
+                        .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                        // logout — только для аутентифицированных
+                        .requestMatchers("/api/auth/logout").authenticated()
+                        // платёжные эндпоинты — тоже только после JWT
+                        .requestMatchers("/api/payment/**").authenticated()
+                        // всё остальное — тоже под защитой
+                        .anyRequest().authenticated()
                 )
 
                 // подкладываем наш фильтр до стандартного UsernamePasswordAuthenticationFilter
