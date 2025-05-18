@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5435/paydb
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+jwt:
+  secret: super-secret-key-change-me
+  ttl: PT30M
+
+security:
+  loginAttempts:
+    max: 5
+    lockMinutes: 15
+
+payment:
+  charge: 1.10
