@@ -1,87 +1,85 @@
-Payment API
+# Payment API
 
-REST-сервис для обработки платежей с аутентификацией через JWT и документацией Swagger
+**REST-сервис для обработки платежей с аутентификацией через JWT и документацией Swagger**
 
-Содержание
+---
 
-Описание проекта
+## Содержание
 
-Технологии
+1. [Описание проекта](#описание-проекта)
+2. [Технологии](#технологии)
+3. [Требования](#требования)
+4. [Установка и запуск](#установка-и-запуск)
+5. [Конфигурация](#конфигурация)
+6. [Описание API и Swagger](#описание-api-и-swagger)
+7. [Примеры запросов](#примеры-запросов)
+8. [Скриншоты](#скриншоты)
 
-Требования
+---
 
-Установка и запуск
+## Описание проекта
 
-Конфигурация
-
-Описание API и Swagger
-
-Примеры запросов
-
-Скриншоты
-
-Описание проекта
-
-Проект представляет собой простое API для регистрации пользователей, аутентификации (login/logout) и выполнения платежей. Все защищённые эндпоинты требуют передачи JWT-токена в заголовке Authorization.
+Проект представляет собой простое API для регистрации пользователей, аутентификации (login/logout) и выполнения платежей. Все защищённые эндпоинты требуют передачи JWT-токена в заголовке `Authorization`.
 
 Ключевые особенности:
 
-Регистрация и хранение пользователей в PostgreSQL
+* Регистрация и хранение пользователей в PostgreSQL
+* Аутентификация с помощью JWT
+* Ограничение числа попыток входа (Login Limiter)
+* Хранение и отзыв токенов в базе данных
+* Документация API через Swagger UI
 
-Аутентификация с помощью JWT
+---
 
-Ограничение числа попыток входа (Login Limiter)
+## Технологии
 
-Хранение и отзыв токенов в базе данных
+* Java 21
+* Spring Boot 3
+* Spring Security
+* Spring Data JPA (Hibernate)
+* PostgreSQL
+* Bucket4j (rate limiting)
+* Swagger / OpenAPI
 
-Документация API через Swagger UI
+---
 
-Технологии
+## Требования
 
-Java 21
+* JDK 21 или выше
+* Maven 3.9+
+* Docker или локально установленный PostgreSQL
 
-Spring Boot 3
+---
 
-Spring Security
+## Установка и запуск
 
-Spring Data JPA (Hibernate)
+1. Клонировать репозиторий:
 
-PostgreSQL
+   ```bash
+   git clone <repository-url>
+   cd payment-api
+   ```
+2. Запустить PostgreSQL (например, через Docker Compose):
 
-Bucket4j (rate limiting)
+   ```bash
+   docker-compose up -d
+   ```
+3. Собрать и запустить сервис:
 
-Swagger / OpenAPI
+   ```bash
+   mvn clean install
+   mvn spring-boot:run
+   ```
 
-Требования
+   Сервис будет доступен на `http://localhost:8080`.
 
-JDK 21 или выше
+---
 
-Maven 3.9+
+## Конфигурация
 
-Docker или локально установленный PostgreSQL
+Все параметры подключения к базе и настройки приложения описаны в `src/main/resources/application.yml`:
 
-Установка и запуск
-
-Клонировать репозиторий:
-
-git clone <repository-url>
-cd payment-api
-
-Запустить PostgreSQL (например, через Docker Compose):
-
-docker-compose up -d
-
-Собрать и запустить сервис:
-
-mvn clean install
-mvn spring-boot:run
-
-Сервис будет доступен на http://localhost:8080.
-
-Конфигурация
-
-Все параметры подключения к базе и настройки приложения описаны в src/main/resources/application.yml:
-
+```yaml
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/paydb
@@ -102,75 +100,96 @@ security:
     lockMinutes: 15
 payment:
   charge: 1.10
+```
 
-Описание API и Swagger
+---
+
+## Описание API и Swagger
 
 Для удобства тестирования и изучения API интегрирован Swagger UI. После запуска сервиса документация доступна по адресу:
 
+```
 http://localhost:8080/swagger-ui.html
+```
 
 или
 
+```
 http://localhost:8080/swagger-ui/index.html
+```
 
 Swagger UI автоматически генерирует список эндпоинтов:
 
-POST /api/auth/register — регистрация нового пользователя
+* `POST /api/auth/register` — регистрация нового пользователя
+* `POST /api/auth/login` — вход (возвращает JWT токен)
+* `POST /api/auth/logout` — выход (отзыв токена)
+* `POST /api/payment` — создание платежа (требуется `Authorization: Bearer <token>`)
 
-POST /api/auth/login — вход (возвращает JWT токен)
+### Пример настройки авторизации в Swagger
 
-POST /api/auth/logout — выход (отзыв токена)
+1. Нажмите кнопку **Authorize** в правом верхнем углу.
+2. Введите в поле значение:
 
-POST /api/payment — создание платежа (требуется Authorization: Bearer <token>)
+   ```
+   Bearer <ваш_JWT_токен>
+   ```
+3. Нажмите **Authorize** и **Close**.
 
-Пример настройки авторизации в Swagger
+После этого Swagger будет автоматически подставлять токен в заголовок `Authorization`.
 
-Нажмите кнопку Authorize в правом верхнем углу.
+---
 
-Введите в поле значение:
+## Примеры запросов
 
-Bearer <ваш_JWT_токен>
+### Регистрация
 
-Нажмите Authorize и Close.
-
-После этого Swagger будет автоматически подставлять токен в заголовок Authorization.
-
-Примеры запросов
-
-Регистрация
-
+```bash
 curl -X POST http://localhost:8080/api/auth/register \
   -H 'Content-Type: application/json' \
   -d '{ "username": "user1", "password": "pass123" }'
+```
 
-Вход (login)
+### Вход (login)
 
+```bash
 curl -X POST http://localhost:8080/api/auth/login \
   -H 'Content-Type: application/json' \
   -d '{ "username": "user1", "password": "pass123" }'
 # Ответ: { "token": "eyJhbGci..." }
+```
 
-Logout
+### Logout
 
+```bash
 curl -X POST http://localhost:8080/api/auth/logout \
   -H 'Authorization: Bearer eyJhbGci...'
+```
 
-Платёж
+### Платёж
 
+```bash
 curl -X POST http://localhost:8080/api/payment \
   -H 'Authorization: Bearer eyJhbGci...' \
   -H 'Content-Type: application/json' \
   -d '{ "amount": 50.00, "description": "Test payment" }'
+```
 
-Скриншоты
+---
 
-Swagger UI — авторизация токеном
+## Скриншоты
 
+### Swagger UI — авторизация токеном
 
+![Swagger Authorize](docs/swagger-authorize.png)
 
-Swagger UI — создание платежа
+### Swagger UI — создание платежа
 
+![Swagger Payment](docs/swagger-payment.png)
 
+### Пример ответа при ошибке
 
-Пример ответа при ошибке
+![Error Response](docs/error-response.png)
 
+---
+
+*README подготовлен для отправки работодателю. Не забудьте приложить к репозиторию папку `docs/` с указанными скриншотами.*
